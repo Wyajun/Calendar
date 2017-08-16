@@ -31,7 +31,7 @@
 @property(nonatomic)NSUInteger showMonth;
 /// 表示支持多选 默认为NO
 @property(nonatomic)BOOL allowsMultipleSelected;
-/// 表示支持手势滑动  默认为NO
+/// 表示支持手势滑动  默认为NO 开启此手势必须 allowsMultipleSelected 为YES
 @property(nonatomic)BOOL allowsSlidingGesture;
 
 /// 返回每个生成的TJCalendarData对象 用于其他初始化

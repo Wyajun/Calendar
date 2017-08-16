@@ -64,7 +64,7 @@
     _calendarView.delegate = self;
     _calendarView.dataSource = self;
     
-    if (_configModel.configData.allowsSlidingGesture) {
+    if (_configModel.configData.allowsSlidingGesture && _configModel.configData.allowsMultipleSelected) {
         _panGes = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGestureFrom:)];
         _panGes.minimumNumberOfTouches = 1;
         _panGes.maximumNumberOfTouches = 1;
