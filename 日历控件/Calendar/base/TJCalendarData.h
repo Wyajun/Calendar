@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-@class TJCalendarConfigModel;
 /// 控制日历显示边界问题 只要用于月开始空白和月末空白
 typedef NS_ENUM(NSInteger, TJCalendarDataType) {
     TJCalendarDataEmpty = 0,   //不显示
@@ -26,7 +25,6 @@ typedef NS_ENUM(NSInteger, TJCalendarLocationType) {
 @property(nonatomic,readonly)TJCalendarLocationType  locationType;
 @property(nonatomic,strong,readonly)NSDate *date;
 @property(nonatomic,strong,readonly)NSIndexPath *path;
-@property(nonatomic,weak)TJCalendarConfigModel *configModel;
 /// 是不是包含在当前月中
 @property(nonatomic,readonly)BOOL isCurrentMonthDate;
 -(instancetype)initWithDateType:(TJCalendarDataType)dataType locationType:(TJCalendarLocationType )locationType date:(NSDate *)date path:(NSIndexPath *)path currentMonthDate:(BOOL)isCurrentMonthDate;

@@ -11,9 +11,9 @@
 #import "TJGeneralCalendarView.h"
 #import "TJGeneralCalendarConfigData.h"
 
-#import "TJCalendarItem.h"
+#import "TJCalendarRoomStatusItem.h"
 #import "TJCalendarHeaderView.h"
-#import "TJCalendarViewCell.h"
+#import "TJCalendarDayWithVacantDescCell.h"
 #import "CalendarDateUtil.h"
 @interface TJHorizontalCalendarView ()
 @property(nonatomic,strong)TJGeneralCalendarView *calendarView;
@@ -37,22 +37,23 @@
     flowlayout.headerReferenceSize = CGSizeMake(self.frame.size.width, 121);//头部视图的框架大小
     flowlayout.itemSize = CGSizeMake(self.frame.size.width/7, 40);
     flowlayout.minimumLineSpacing = 0;
-    flowlayout.minimumInteritemSpacing = 5;
+    flowlayout.minimumInteritemSpacing = 0;
     flowlayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     viewConfig.flowLayout = flowlayout;
     viewConfig.sectionHeader =  [TJCalendarHeaderView class];;
-    viewConfig.calendarCellClass = [TJCalendarViewCell class];
+    viewConfig.calendarCellClass = [TJCalendarDayWithVacantDescCell class];
     
-    
-
-    viewConfig.startDate = nil;
+    viewConfig.allowsMultipleSelected = YES;
+    viewConfig.startDate = [[NSDate date] afterMonth:3];;
     viewConfig.currentDate = [NSDate date];;
     viewConfig.endDate = nil;
     viewConfig.showMonth = 6;
-    viewConfig.calendarDataClass = [TJCalendarItem class];
+    viewConfig.allowsSlidingGesture = YES;
+    viewConfig.calendarDataClass = [TJCalendarRoomStatusItem class];
     viewConfig.calendarData = ^(TJCalendarData *calendarData) {
-        TJCalendarItem *item = (TJCalendarItem *)calendarData;
-        item.title = [calendarData.date showMMDD];
+        TJCalendarRoomStatusItem *item = (TJCalendarRoomStatusItem *)calendarData;
+        item.title = [calendarData.date dayTitle];
+        item.vacantDayDesc = calendarData.path.row % 2 == 1 ? @"有房": @"无房";
     };
    
     
@@ -60,9 +61,11 @@
     [self addSubview:calendarView];
     
     calendarView.calendarSelectData = ^(NSArray<TJCalendarData *> *calendarDatas, TJCalendarData *calendarData, BOOL isSelect) {
-        NSLog(@"%@",calendarData.date);
+//        NSLog(@"%@",@(calendarData.path.row));
+        TJCalendarRoomStatusItem *item = (TJCalendarRoomStatusItem *)calendarData;
+        item.isSelected = isSelect;
     };
-
+     [calendarView scrollToStartIndexPath];
     
 }
 

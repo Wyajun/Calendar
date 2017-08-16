@@ -8,27 +8,10 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "TJCalendarCellProtocol.h"
 
 @class TJCalendarData;
 
-/// 日期与选中日期直接的比较结果
-typedef NS_ENUM(NSUInteger,TJDateCompareResult)
-{
-    /// 还没有选择开始或结束
-    TJDateCompareNone = 0,
-    /// 小于初始化日期
-    TJDateCompareLessThanStartDate = 1,
-    /// 小于左侧
-    TJDateCompareLessThanLeft = 2,
-    /// 左侧
-    TJDateCompareLeft = 3 ,
-    /// 包含
-    TJDateCompareContains = 4 ,
-    /// 右侧
-    TJDateCompareRight = 5,
-    /// 大于右侧
-    TJDateCompareGreaterThanRight = 6,
-};
 @class TJCalendarDataConfig,TJCalendarViewConfig;
 
 @interface TJCalendarConfigModel : NSObject
@@ -42,6 +25,8 @@ typedef NS_ENUM(NSUInteger,TJDateCompareResult)
 @property(nonatomic,strong,readonly)TJCalendarViewConfig *calendarViewConfig;
 /// 数据配置
 @property(nonatomic,strong,readonly)TJCalendarDataConfig *configData;
+/// 开始的选中indexpath 不支持多选
+@property(nonatomic,strong,readonly)NSIndexPath *selectStartIndexPath;
 /*
  选中calendarData 如果allowsMultipleSelection为YES则会取消calendarData
  其他请看实现逻辑
@@ -50,6 +35,14 @@ typedef NS_ENUM(NSUInteger,TJDateCompareResult)
 /// 比较当前日期设置日期的位置 具体请看实现逻辑
 -(TJDateCompareResult)compareResultWithCalendarData:(TJCalendarData *)TJCalendarData;
 
+/// 手势滑动使用
+/// 手势第一个接触到的item
+-(void)startPanGestureRecognizerIndexPath:(NSIndexPath *)indexPath;
+/// 手势改变
+-(void)changePanGestureRecognizerIndexPath:(NSIndexPath *)indexPath;
+/// 手势最后接触到的item
+-(void)endPanGestureRecognizerIndexPath:(NSIndexPath *)indexPath;
+
 #pragma --mark 回调
 /* 但有日期变更的时候，会回调此方法
  * calendarDatas 现有保存的日期 allowsMultipleSelection 为NO 按时间大小排序 其他无序
@@ -57,6 +50,8 @@ typedef NS_ENUM(NSUInteger,TJDateCompareResult)
  * isSelect      是取消还是添加
  */
 @property(nonatomic,copy)void(^calendarSelectData)(NSArray <TJCalendarData *>*calendarDatas,TJCalendarData *calendarData, BOOL isSelect);
+
+
 
 /**
  *横向分页回调

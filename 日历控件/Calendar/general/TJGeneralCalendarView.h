@@ -29,5 +29,8 @@
  */
 @property(nonatomic,strong,readonly)NSArray *selectCalendarDatas;
 
+/// 使开始选中的cell可见
+-(void)scrollToStartIndexPath;
+
 -(instancetype)initWithFrame:(CGRect)frame calendarConfigData:(TJGeneralCalendarConfigData *)configData;
 @end

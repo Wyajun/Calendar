@@ -16,6 +16,8 @@
 		4F3E14971F41944A00DF3B7F /* TJGeneralCalendarConfigData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3E14961F41944A00DF3B7F /* TJGeneralCalendarConfigData.m */; };
 		4F3E149C1F41A0AB00DF3B7F /* TJHorizontalCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3E14991F41A0AB00DF3B7F /* TJHorizontalCalendarView.m */; };
 		4F3E149D1F41A0AB00DF3B7F /* TJVerticalCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3E149B1F41A0AB00DF3B7F /* TJVerticalCalendarView.m */; };
+		4F3E14A01F42B8D700DF3B7F /* TJCalendarDayWithVacantDescCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3E149F1F42B8D700DF3B7F /* TJCalendarDayWithVacantDescCell.m */; };
+		4F3E14A41F42B9EB00DF3B7F /* TJCalendarRoomStatusItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3E14A31F42B9EB00DF3B7F /* TJCalendarRoomStatusItem.m */; };
 		4F490B681CF2E62C00C0118E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F490B671CF2E62C00C0118E /* main.m */; };
 		4F490B6B1CF2E62C00C0118E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F490B6A1CF2E62C00C0118E /* AppDelegate.m */; };
 		4F490B6E1CF2E62C00C0118E /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F490B6D1CF2E62C00C0118E /* ViewController.m */; };
@@ -67,6 +69,11 @@
 		4F3E14991F41A0AB00DF3B7F /* TJHorizontalCalendarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TJHorizontalCalendarView.m; sourceTree = "<group>"; };
 		4F3E149A1F41A0AB00DF3B7F /* TJVerticalCalendarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TJVerticalCalendarView.h; sourceTree = "<group>"; };
 		4F3E149B1F41A0AB00DF3B7F /* TJVerticalCalendarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TJVerticalCalendarView.m; sourceTree = "<group>"; };
+		4F3E149E1F42B8D700DF3B7F /* TJCalendarDayWithVacantDescCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TJCalendarDayWithVacantDescCell.h; sourceTree = "<group>"; };
+		4F3E149F1F42B8D700DF3B7F /* TJCalendarDayWithVacantDescCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TJCalendarDayWithVacantDescCell.m; sourceTree = "<group>"; };
+		4F3E14A11F42B93F00DF3B7F /* macro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = macro.h; sourceTree = "<group>"; };
+		4F3E14A21F42B9EB00DF3B7F /* TJCalendarRoomStatusItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TJCalendarRoomStatusItem.h; sourceTree = "<group>"; };
+		4F3E14A31F42B9EB00DF3B7F /* TJCalendarRoomStatusItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TJCalendarRoomStatusItem.m; sourceTree = "<group>"; };
 		4F490B631CF2E62C00C0118E /* 日历控件.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "日历控件.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F490B671CF2E62C00C0118E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		4F490B691CF2E62C00C0118E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -162,8 +169,12 @@
 				4F3E14901F418CA900DF3B7F /* TJCalendarHeaderView.m */,
 				4F3E14871F4146A600DF3B7F /* TJCalendarItem.h */,
 				4F3E14881F4146A600DF3B7F /* TJCalendarItem.m */,
+				4F3E14A21F42B9EB00DF3B7F /* TJCalendarRoomStatusItem.h */,
+				4F3E14A31F42B9EB00DF3B7F /* TJCalendarRoomStatusItem.m */,
 				4F3E14891F4146A600DF3B7F /* TJCalendarViewCell.h */,
 				4F3E148A1F4146A600DF3B7F /* TJCalendarViewCell.m */,
+				4F3E149E1F42B8D700DF3B7F /* TJCalendarDayWithVacantDescCell.h */,
+				4F3E149F1F42B8D700DF3B7F /* TJCalendarDayWithVacantDescCell.m */,
 			);
 			path = business;
 			sourceTree = "<group>";
@@ -198,6 +209,7 @@
 				4F490B691CF2E62C00C0118E /* AppDelegate.h */,
 				4F490B6A1CF2E62C00C0118E /* AppDelegate.m */,
 				4F490B6C1CF2E62C00C0118E /* ViewController.h */,
+				4F3E14A11F42B93F00DF3B7F /* macro.h */,
 				4F490B6D1CF2E62C00C0118E /* ViewController.m */,
 				4F490B6F1CF2E62C00C0118E /* Main.storyboard */,
 				4F490B721CF2E62C00C0118E /* Assets.xcassets */,
@@ -341,6 +353,7 @@
 				TargetAttributes = {
 					4F490B621CF2E62C00C0118E = {
 						CreatedOnToolsVersion = 7.3;
+						DevelopmentTeam = 88KP5AEL55;
 					};
 					4F490B7B1CF2E62C00C0118E = {
 						CreatedOnToolsVersion = 7.3;
@@ -460,6 +473,7 @@
 				4F490B6E1CF2E62C00C0118E /* ViewController.m in Sources */,
 				4FA1D78C1F3D9D5500264709 /* CalendarDateUtil.m in Sources */,
 				4F490B6B1CF2E62C00C0118E /* AppDelegate.m in Sources */,
+				4F3E14A41F42B9EB00DF3B7F /* TJCalendarRoomStatusItem.m in Sources */,
 				4F3E149C1F41A0AB00DF3B7F /* TJHorizontalCalendarView.m in Sources */,
 				4F3E14911F418CA900DF3B7F /* TJCalendarHeaderView.m in Sources */,
 				4F3E14941F4193E600DF3B7F /* TJGeneralCalendarView.m in Sources */,
@@ -467,6 +481,7 @@
 				4FA1D78F1F3D9D5500264709 /* TJCalendarData.m in Sources */,
 				4F490B681CF2E62C00C0118E /* main.m in Sources */,
 				4FA1D7911F3D9D5500264709 /* TJCalendarView.m in Sources */,
+				4F3E14A01F42B8D700DF3B7F /* TJCalendarDayWithVacantDescCell.m in Sources */,
 				4F294CC01CF57942007D3688 /* TJGeneralGridView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -609,10 +624,11 @@
 			baseConfigurationReference = 88003302C376A429ACAD5E13 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 88KP5AEL55;
 				INFOPLIST_FILE = "日历控件/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.wdtfw.ios.----";
+				PRODUCT_BUNDLE_IDENTIFIER = com.wangyajun.123;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -622,10 +638,11 @@
 			baseConfigurationReference = 70974CA141499C96F794CDE7 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 88KP5AEL55;
 				INFOPLIST_FILE = "日历控件/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.wdtfw.ios.----";
+				PRODUCT_BUNDLE_IDENTIFIER = com.wangyajun.123;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

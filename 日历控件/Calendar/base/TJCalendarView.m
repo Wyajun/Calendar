@@ -17,6 +17,9 @@
 @property(nonatomic,strong)UIScrollView *headerScrollView;
 @property(nonatomic,strong)UICollectionView *calendarView;
 @property(nonatomic,strong)NSArray *months;
+@property(nonatomic,strong)UIPanGestureRecognizer *panGes;
+
+@property(nonatomic)BOOL isPanStart;
 @end
 
 @interface TJCalendarView (UICollectionViewDelegate)<UICollectionViewDelegate,UICollectionViewDataSource>
@@ -24,6 +27,11 @@
 
 @interface TJCalendarView (ScrollView)<UIScrollViewDelegate>
 @end
+
+@interface TJCalendarView (Gesture)<UIGestureRecognizerDelegate>
+- (void)handlePanGestureFrom:(UIPanGestureRecognizer *)recognizer;
+@end
+
 
 #define kCalendarCellReuseIdentifier  @"kCalendarCellReuseIdentifier"
 #define kCalendarCellHeaderView  @"kCalendarCellHeaderView"
@@ -55,6 +63,15 @@
     }];
     _calendarView.delegate = self;
     _calendarView.dataSource = self;
+    
+    if (_configModel.configData.allowsSlidingGesture) {
+        _panGes = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGestureFrom:)];
+        _panGes.minimumNumberOfTouches = 1;
+        _panGes.maximumNumberOfTouches = 1;
+        _panGes.delegate = self;
+        [_calendarView addGestureRecognizer:_panGes];
+    }
+    
 }
 -(void)setBackgroundColor:(UIColor *)backgroundColor {
     [super setBackgroundColor:backgroundColor];
@@ -75,6 +92,9 @@
     CGSize size = _configModel.calendarViewConfig.flowLayout.headerReferenceSize;
     _headerScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];
     _headerScrollView.contentSize = CGSizeMake(size.width * _configModel.configData.showMonth, size.height);
+    _headerScrollView.userInteractionEnabled = NO;
+    _headerScrollView.scrollEnabled = NO;
+    _headerScrollView.showsHorizontalScrollIndicator = NO;
     [self addSubview:_headerScrollView];
     
     for (NSInteger index = 0; index < _configModel.configData.showMonth; index ++) {
@@ -85,6 +105,31 @@
         [_headerScrollView addSubview:headerView];
     }
     _configModel.calendarViewConfig.flowLayout.headerReferenceSize = CGSizeZero;
+    
+    
+}
+
+-(void)scrollToStartIndexPath {
+    
+    if (_configModel.configData.allowsMultipleSelected) {
+        return;
+    }
+    
+    if (!_configModel.selectStartIndexPath) {
+        return;
+    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (_configModel.calendarViewConfig.flowLayout.scrollDirection == UICollectionViewScrollDirectionVertical) {
+            [_calendarView scrollToItemAtIndexPath:_configModel.selectStartIndexPath atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:NO];
+            
+        }else {
+            [_calendarView setContentOffset:CGPointMake(_configModel.selectStartIndexPath.section * self.frame.size.width, 0)];
+            if (_configModel.scrollToOffset) {
+                _configModel.scrollToOffset(_calendarView.contentOffset,_configModel.selectStartIndexPath.section);
+            }
+        }
+    });
+   
     
     
 }
@@ -118,7 +163,7 @@
     UICollectionViewCell<TJCalendarCellProtocol>* cell = [collectionView dequeueReusableCellWithReuseIdentifier:kCalendarCellReuseIdentifier forIndexPath:indexPath];
     NSArray *list = _months[indexPath.section];
     TJCalendarData *data = list[indexPath.row];
-    cell.data = data;
+    [cell resetCalendarData:data compareResult:[_configModel compareResultWithCalendarData:data]];
     return cell;
 }
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -156,6 +201,61 @@
     [self scrollViewDidEndScrollingAnimation:scrollView];
 }
 @end
+
+
+@implementation TJCalendarView (Gesture)
+
+#pragma mark -- PanGestureDelegate
+- (void)handlePanGestureFrom:(UIPanGestureRecognizer *)recognizer
+{
+    
+    if (recognizer != _panGes) {
+        return;
+    }
+    
+    CGPoint point = [recognizer locationInView:recognizer.view];
+    NSIndexPath *indexPath = [self.calendarView indexPathForItemAtPoint:point];
+
+   
+    
+    if (recognizer.state == UIGestureRecognizerStateEnded || recognizer.state == UIGestureRecognizerStateFailed || recognizer.state == UIGestureRecognizerStateCancelled) {
+        [_configModel endPanGestureRecognizerIndexPath:indexPath];
+        return;
+    }
+    if (indexPath == nil) {
+        NSLog(@"%@ nil  nil",NSStringFromCGPoint(point));
+        return;
+    }
+    if (recognizer.state == UIGestureRecognizerStateBegan) {
+        [_configModel startPanGestureRecognizerIndexPath:indexPath];
+        return;
+    }
+    [_configModel changePanGestureRecognizerIndexPath:indexPath];
+    [_calendarView reloadData];
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    if ([gestureRecognizer isEqual:_panGes] && [otherGestureRecognizer isEqual:self.calendarView.panGestureRecognizer]){
+        return YES;
+    }
+    return NO;
+}
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
+    
+    if (!self.configModel.configData.allowsSlidingGesture) {
+        return NO;
+    }
+    if (_panGes == gestureRecognizer) {
+        CGPoint translation = [_panGes velocityInView:self.calendarView];
+        if (self.configModel.calendarViewConfig.flowLayout.scrollDirection == UICollectionViewScrollDirectionVertical) {
+            return  fabs(translation.y) < fabs(translation.x);
+        }
+        return fabs(translation.x) < fabs(translation.y);
+    }
+    return YES;
+}
+@end
+
 
 
 

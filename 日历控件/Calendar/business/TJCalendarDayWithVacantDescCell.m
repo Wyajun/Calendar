@@ -6,80 +6,124 @@
 //  Copyright © 2016年 王亚军. All rights reserved.
 //
 
-#import "TJCalendarViewCell.h"
+#import "TJCalendarDayWithVacantDescCell.h"
 #import "Masonry.h"
-#import "TJCalendarItem.h"
-
 #import "macro.h"
-
-
-@interface TJCalendarViewCell()
+#import "TJCalendarRoomStatusItem.h"
+@interface TJCalendarDayWithVacantDescCell(){
+    NSInteger nomalFontSize_;
+    NSInteger festivalFontSize_;
+    NSInteger megTextFontSize_;
+    NSInteger currentFontSize_;
+    CGFloat cirleBackViewWidth_;
+    CGFloat backViewPosiontX_;
+    CGFloat backViewPosiontY_;
+    
+}
 @property(nonatomic,strong)UIView *backView;
 @property(nonatomic,strong)UIView *contentBackView;
 @property(nonatomic,strong)UILabel *dayLab;//显示日期
-@property(nonatomic,strong)TJCalendarItem *item;
+@property(nonatomic,strong)UILabel *dayDesc;//显示标签
+@property(nonatomic) BOOL hasFinishUpdateLayout;
+@property(nonatomic,strong)TJCalendarRoomStatusItem *item;
 @end
-@implementation TJCalendarViewCell
+@implementation TJCalendarDayWithVacantDescCell
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = [UIColor whiteColor];
+        self.backgroundColor = [UIColor yellowColor];
+        [self initCommonConfig];
         [self initView];
     }
     return self;
+}
+
+- (void)initCommonConfig
+{
+    cirleBackViewWidth_ = 36;
+    nomalFontSize_ = 14, festivalFontSize_ = 10, megTextFontSize_ = 10;
+    backViewPosiontX_ = (self.frame.size.width- cirleBackViewWidth_)/2.f;
+    backViewPosiontY_ = (self.frame.size.height - cirleBackViewWidth_)/2.f;
 }
 
 - (void)initView{
     
     _backView = [[UIView alloc] init];
     [self.contentView addSubview:_backView];
+   
     
-    
-    _contentBackView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
+    _contentBackView = [[UIView alloc] initWithFrame:CGRectMake(backViewPosiontX_, backViewPosiontY_, cirleBackViewWidth_, cirleBackViewWidth_)];
+    _contentBackView.center = self.contentView.center;
     [self.contentView addSubview:_contentBackView];
     
     
-    _dayLab = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
-    _dayLab.font = [UIFont systemFontOfSize:15];
+    _dayLab = [[UILabel alloc] init];
+    _dayLab.font = kFontPF(14);
     _dayLab.textAlignment = NSTextAlignmentCenter;
     [_contentBackView addSubview:_dayLab];
+
     
+    _dayDesc = [[UILabel alloc] init];
+    _dayDesc.textAlignment = NSTextAlignmentCenter;
+    _dayDesc.font = kFontPF(megTextFontSize_);
+    [_contentBackView addSubview:_dayDesc];
 }
--(void)resetCalendarData:(TJCalendarItem *)data compareResult:(TJDateCompareResult)compareResult {
+
+-(void)resetCalendarData:(TJCalendarRoomStatusItem *)data compareResult:(TJDateCompareResult)compareResult {
     _item = data;
     _contentBackView.center = self.contentView.center;
-//    GADate *date_ = [GADate dateFromNSDate:_data.date];
-    //
-//    if (_data.holidayTitle.length > 0) {
-//        _dayLab.text = _data.holidayTitle;
-//        _dayLab.font = kFontPF(10);
-//    } else if (date_.isToday || date_.isTommorrow) {
-//        _dayLab.text = date_.isToday ? @"今天" :@"明天";
-//        _dayLab.font = kFontPF(10);
-//    } else {
-//        
-//    }
     
     _dayLab.text = data.title;
     _dayLab.font = kFontPF(15);
-    
-    self.backView.backgroundColor = [self contentBackCololWithCompareResult:compareResult dataType:data.dataType];
+     currentFontSize_ = nomalFontSize_;
+    if (data.isSelected) {
+       self.backView.backgroundColor = UIColorFromRGB(0xfec09b);
+    }else {
+       self.backView.backgroundColor = [UIColor whiteColor];
+    }
+    //[self contentBackCololWithCompareResult:compareResult dataType:data.dataType];
     _contentBackView.backgroundColor = self.backView.backgroundColor;
     
-    _dayLab.textColor = [self titleCololWithCompareResult:compareResult dataType:data.dataType vacantDayValid:YES];
-    
-    if (compareResult == TJDateCompareLeft && data.locationType != TJCalendarLocationRgiht) {
-        [self changeBackViewConstraint:TJCalendarLocationLeft];
-    }
-    if (compareResult == TJDateCompareRight && data.locationType != TJCalendarLocationLeft) {
-        [self changeBackViewConstraint:TJCalendarLocationRgiht];
-    }
-    if (compareResult == TJDateCompareContains) {
-        [self changeBackViewConstraint:data.locationType];
-    }
+    _dayLab.textColor = UIColorFromRGB(0x333333); //[self titleCololWithCompareResult:compareResult dataType:data.dataType vacantDayValid:NO];
+    _dayDesc.textColor = UIColorFromRGB(0x333333); //[self titleCololWithCompareResult:compareResult dataType:data.dataType vacantDayValid:NO];
+    _dayDesc.text = data.vacantDayDesc;
+//    if (compareResult == TJDateCompareLeft && data.locationType != TJCalendarLocationRgiht) {
+//        [self changeBackViewConstraint:TJCalendarLocationLeft];
+//    }
+//    if (compareResult == TJDateCompareRight && data.locationType != TJCalendarLocationLeft) {
+//        [self changeBackViewConstraint:TJCalendarLocationRgiht];
+//    }
+//    if (compareResult == TJDateCompareContains) {
+//        [self changeBackViewConstraint:data.locationType];
+//    }
     
     _dayLab.backgroundColor = self.contentBackView.backgroundColor;
+    _dayDesc.backgroundColor = _dayLab.backgroundColor;
+    
+    
+    //
+    [self updateCustomviewsLayout];
+
+}
+
+-(void)updateCustomviewsLayout
+{
+    CGFloat fontDiffSize = nomalFontSize_ - currentFontSize_;
+    CGFloat textSpaceValue = floorf((cirleBackViewWidth_ - currentFontSize_ - megTextFontSize_) / 3);
+    CGFloat dayTextPositionY = textSpaceValue + fontDiffSize / 2;
+    CGFloat msgTextPositionY = 2 * floorf((cirleBackViewWidth_ - nomalFontSize_ - megTextFontSize_) / 3) + nomalFontSize_;
+    CGFloat dayTextWithoutMsgTextPositionY = ( cirleBackViewWidth_ - currentFontSize_ ) / 2.f;
+    CGFloat textY_ = self.item.vacantDayDesc.length > 0 ? dayTextPositionY: dayTextWithoutMsgTextPositionY;
+    //
+    _dayLab.frame = CGRectMake(0, textY_, cirleBackViewWidth_, currentFontSize_);
+    if (self.item.vacantDayDesc.length > 0) {
+        _dayDesc.frame = CGRectMake(0, msgTextPositionY, cirleBackViewWidth_, megTextFontSize_);
+        _dayDesc.hidden = NO;
+    } else {
+        _dayDesc.hidden = YES;
+    }
+   
 }
 
 
@@ -123,7 +167,7 @@
             if (dataType == TJCalendarDataContent && vacantDayValid) {
                 return UIColorFromRGB(0x333333);
             } else {
-                return UIColorFromRGB(0xdadada);
+                return UIColorFromRGB(0x333333);
             }
         }
             break;
@@ -180,4 +224,7 @@
     }
     
 }
+
+
+
 @end

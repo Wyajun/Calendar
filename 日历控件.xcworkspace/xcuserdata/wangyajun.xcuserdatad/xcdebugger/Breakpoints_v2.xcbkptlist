@@ -9,13 +9,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "&#x65e5;&#x5386;&#x63a7;&#x4ef6;/Calendar/base/TJCalendarView.m"
-            timestampString = "524396264.466009"
+            filePath = "&#x65e5;&#x5386;&#x63a7;&#x4ef6;/Calendar/business/TJCalendarViewCell.m"
+            timestampString = "524467099.271143"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "125"
-            endingLineNumber = "125"
-            landmarkName = "-collectionView:didSelectItemAtIndexPath:"
+            startingLineNumber = "73"
+            endingLineNumber = "73"
+            landmarkName = "-resetCalendarData:compareResult:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -25,13 +25,77 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "&#x65e5;&#x5386;&#x63a7;&#x4ef6;/Calendar/general/TJGeneralCalendarView.m"
-            timestampString = "524395935.82801"
+            filePath = "&#x65e5;&#x5386;&#x63a7;&#x4ef6;/Calendar/business/TJCalendarViewCell.m"
+            timestampString = "524467099.271143"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "60"
-            endingLineNumber = "60"
-            landmarkName = "-setCalendarSelectData:"
+            startingLineNumber = "76"
+            endingLineNumber = "76"
+            landmarkName = "-resetCalendarData:compareResult:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "&#x65e5;&#x5386;&#x63a7;&#x4ef6;/Calendar/business/TJCalendarViewCell.m"
+            timestampString = "524467099.271143"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "79"
+            endingLineNumber = "79"
+            landmarkName = "-resetCalendarData:compareResult:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "&#x65e5;&#x5386;&#x63a7;&#x4ef6;/Calendar/business/TJCalendarViewCell.m"
+            timestampString = "524467099.271143"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "144"
+            endingLineNumber = "144"
+            landmarkName = "-changeBackViewConstraint:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "&#x65e5;&#x5386;&#x63a7;&#x4ef6;/Calendar/business/TJCalendarViewCell.m"
+            timestampString = "524563019.796827"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "50"
+            endingLineNumber = "50"
+            landmarkName = "-resetCalendarData:compareResult:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "&#x65e5;&#x5386;&#x63a7;&#x4ef6;/Calendar/base/TJCalendarConfigModel.m"
+            timestampString = "524565189.684913"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "86"
+            endingLineNumber = "86"
+            landmarkName = "-setSelectCalendarData:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

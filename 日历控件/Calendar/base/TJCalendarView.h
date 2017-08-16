@@ -10,4 +10,6 @@
 @class TJCalendarConfigModel;
 @interface TJCalendarView : UIView
 @property(nonatomic,strong)TJCalendarConfigModel *configModel;
+/// 使开始选中的cell可见
+-(void)scrollToStartIndexPath;
 @end

@@ -12,6 +12,7 @@
 @interface TJGeneralCalendarView ()
 @property(nonatomic,strong)TJGeneralCalendarConfigData *configData;
 @property(nonatomic,strong)TJCalendarConfigModel *configModel;
+@property(nonatomic,strong)TJCalendarView *calendarView;
 @end
 
 @implementation TJGeneralCalendarView
@@ -21,6 +22,7 @@
     if (self) {
         _configData = configData;
         [self initCalendarView];
+        self.backgroundColor = [UIColor whiteColor];
     }
     return self;
 }
@@ -50,6 +52,7 @@
     [self addSubview:calendarView];
     calendarView.configModel = configModel;
     _configModel = configModel;
+    _calendarView = calendarView;
 }
 
 -(NSArray *)selectCalendarDatas {
@@ -59,4 +62,13 @@
 -(void)setCalendarSelectData:(void (^)(NSArray<TJCalendarData *> *, TJCalendarData *, BOOL))calendarSelectData {
     _configModel.calendarSelectData = calendarSelectData;
 }
+-(void)setBackgroundColor:(UIColor *)backgroundColor {
+    [super setBackgroundColor:backgroundColor];
+    self.calendarView.backgroundColor = backgroundColor;
+}
+
+-(void)scrollToStartIndexPath {
+    [self.calendarView scrollToStartIndexPath];
+}
+
 @end

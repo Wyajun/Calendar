@@ -27,14 +27,23 @@
 
 
 @implementation NSDate (YJCalender)
-
+- (NSString *)showMmDd{
+    static  NSDateFormatter *formatter = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        formatter = [[NSDateFormatter alloc] init];
+        [formatter setTimeZone: [NSTimeZone timeZoneWithName:@"Asia/Shanghai"]];
+        formatter.dateFormat = @"MM.dd";
+    });
+    return [formatter stringFromDate:self];
+}
 -(NSString *)dayTitle {
     static  NSDateFormatter *formatter = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         formatter = [[NSDateFormatter alloc] init];
         [formatter setTimeZone: [NSTimeZone timeZoneWithName:@"Asia/Shanghai"]];
-        formatter.dateFormat = @"dd";
+        formatter.dateFormat = @"d";
     });
     return [formatter stringFromDate:self];
 }
@@ -44,9 +53,30 @@
     dispatch_once(&onceToken, ^{
         formatter = [[NSDateFormatter alloc] init];
         [formatter setTimeZone: [NSTimeZone timeZoneWithName:@"Asia/Shanghai"]];
-        formatter.dateFormat = @"YYYYMMdd";
+        formatter.dateFormat = @"yyyyMMdd";
     });
     return [formatter stringFromDate:self];
+}
+-(NSString *)showYYYYMMdd {
+    static  NSDateFormatter *formatter = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        formatter = [[NSDateFormatter alloc] init];
+        [formatter setTimeZone: [NSTimeZone timeZoneWithName:@"Asia/Shanghai"]];
+        formatter.dateFormat = @"yyyy-MM-dd";
+    });
+    return [formatter stringFromDate:self];
+ 
+}
++(NSDate *)dateFormString:(NSString *)string {
+    static  NSDateFormatter *formatter = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        formatter = [[NSDateFormatter alloc] init];
+        [formatter setTimeZone: [NSTimeZone timeZoneWithName:@"Asia/Shanghai"]];
+        formatter.dateFormat = @"yyyy-MM-dd";
+    });
+    return [formatter dateFromString:string];
 }
 -(NSString *)showMMDD {
     static  NSDateFormatter *formatter = nil;
@@ -54,7 +84,40 @@
     dispatch_once(&onceToken, ^{
         formatter = [[NSDateFormatter alloc] init];
         [formatter setTimeZone: [NSTimeZone timeZoneWithName:@"Asia/Shanghai"]];
-        formatter.dateFormat = @"MM月dd日";
+        formatter.dateFormat = @"M月d日";
+    });
+    return [formatter stringFromDate:self];
+}
+- (NSString *)showMM_DD{
+    static  NSDateFormatter *formatter = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        formatter = [[NSDateFormatter alloc] init];
+        [formatter setTimeZone: [NSTimeZone timeZoneWithName:@"Asia/Shanghai"]];
+        formatter.dateFormat = @"MM-dd";
+    });
+    return [formatter stringFromDate:self];
+
+}
+- (NSString *)showWeek{
+    static  NSDateFormatter *formatter = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        formatter = [[NSDateFormatter alloc] init];
+        [formatter setTimeZone: [NSTimeZone timeZoneWithName:@"Asia/Shanghai"]];
+        formatter.dateFormat = @"EEEE";
+    });
+    return [formatter stringFromDate:self];
+}
+
+
+-(NSString *)showMMDD1 {
+    static  NSDateFormatter *formatter = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        formatter = [[NSDateFormatter alloc] init];
+        [formatter setTimeZone: [NSTimeZone timeZoneWithName:@"Asia/Shanghai"]];
+        formatter.dateFormat = @"M.d";
     });
     return [formatter stringFromDate:self];
 }
@@ -81,12 +144,16 @@
     NSDateComponents *comps = [calendar components:TJMonthCalendarUnit fromDate:self];
     return  comps.month;
 }
-
 -(NSInteger)yearWithDate
 {
     NSCalendar *calendar = [NSDate calendar];
     NSDateComponents *comps = [calendar components:TJCalendarUnitYear fromDate:self];
     return  comps.year;
+}
+- (NSInteger)dayWithDate{
+    NSCalendar *calendar = [NSDate calendar];
+    NSDateComponents *comps = [calendar components:TJCalendarUnitYear fromDate:self];
+    return  comps.day;
 }
 -(NSInteger)numbersOfWeek
 {
@@ -122,6 +189,19 @@
     return date;
     
 }
++(NSDate *)currentDateZeroTime {
+    
+    NSDate *date = [NSDate date];
+    static  NSDateFormatter *formatter = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        formatter = [[NSDateFormatter alloc] init];
+        [formatter setTimeZone: [NSTimeZone timeZoneWithName:@"Asia/Shanghai"]];
+        formatter.dateFormat = @"yyyy-MM-dd";
+    });
+    NSString *dateSting =  [formatter stringFromDate:date];
+    return [formatter dateFromString:dateSting];
+}
 -(NSInteger)aFewDaysBetweenDate:(NSDate *)endDate {
     NSCalendar *gregorian = [NSDate calendar];
     NSDateComponents *comps = [gregorian components:TJDayCalendarUnit fromDate:self toDate:endDate  options:0];
@@ -143,12 +223,7 @@
     static  NSCalendar *calendar = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        if ([[[UIDevice currentDevice] systemVersion] doubleValue] >= 8.0) {
-            calendar = [NSCalendar calendarWithIdentifier:NSGregorianCalendar];
-        }else {
-            calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
-        }
-        
+        calendar = [NSCalendar calendarWithIdentifier:NSCalendarIdentifierGregorian];
         [calendar setFirstWeekday:1];
         NSTimeZone* destinationTimeZone = [NSTimeZone timeZoneWithName:@"Asia/Shanghai"];
         [calendar setTimeZone:destinationTimeZone];
@@ -159,4 +234,144 @@
     
 }
 
+-(BOOL)biggerThen:(NSDate *)date {
+    return [self compare:date] == NSOrderedDescending;
+}
+
 @end
+@implementation NSDate (Order)
+
++ (NSArray *)getOrderRangeStartDate:(NSDate *)startDate EndDate:(NSDate *)endDate{
+    //  计算两个日期之间的 差距
+    NSMutableArray *array = [NSMutableArray arrayWithCapacity:0];
+    NSDate *currentDate = [NSDate currentDateZeroTime];
+    
+    NSInteger day = [startDate aFewDaysBetweenDate:currentDate];
+    NSInteger days = [startDate aFewDaysBetweenDate:endDate];
+    int  currentStart = 0;
+    if (day == 0) {
+        currentStart = 1;
+    }
+    
+    
+    for ( int i=currentStart; i<=days; i++) {
+        NSDate *date = [startDate afterDay:i];
+        [array addObject:date];
+    }
+    return array;
+}
++ (NSArray *)getOrderRangeTicketsUseDate:(NSDate *)startDate EndDate:(NSDate *)endDate{
+
+    //  计算两个日期之间的 差距
+    NSMutableArray *array = [NSMutableArray arrayWithCapacity:0];
+    NSInteger days = [startDate aFewDaysBetweenDate:endDate];
+    for ( int i=0; i<=days; i++) {
+        NSDate *date = [startDate afterDay:i];
+        [array addObject:date];
+    }
+    return array;
+
+}
+- (NSString *)showWeekZHouWay{
+    NSArray *array= @[@"",@"周日",@"周一",@"周二",@"周三",@"周四",@"周五",@"周六"];
+    return [array objectAtIndex:[self numbersOfWeek]];
+}
+
+
+
+@end
+
+@implementation NSDate (villa)
+
+-(NSString *)showVillaDate {
+    static  NSDateFormatter *formatter = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        formatter = [[NSDateFormatter alloc] init];
+        [formatter setTimeZone: [NSTimeZone timeZoneWithName:@"Asia/Shanghai"]];
+        formatter.dateFormat = @"yyyy.MM.dd";
+    });
+    return [formatter stringFromDate:self];
+}
+
+@end
+
+@implementation NSDate (specialSaleSecKill)
+
+-(NSString *)showSecKillTime {
+    static  NSDateFormatter *formatter = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        formatter = [[NSDateFormatter alloc] init];
+        [formatter setTimeZone: [NSTimeZone timeZoneWithName:@"Asia/Shanghai"]];
+        formatter.dateFormat = @"HH:MM";
+    });
+    return [formatter stringFromDate:self];
+
+}
+
+@end
+
+@implementation NSDate (Date)
+
+//判断两个时间是否是同一天
++ (BOOL) isEqualDay:(NSDate*) date1 date:(NSDate*)date2
+{
+    NSString* date1Str = [date1 showYYYYMMdd];
+    NSString* date2Str = [date2 showYYYYMMdd];
+    if ([date1Str isEqualToString:date2Str]) {
+        return YES;
+    }
+    return NO;
+}
+
+// 今天
+- (BOOL) isToday {
+    
+    NSDate* today = [NSDate getToday];
+    return [NSDate isEqualDay:self date:today];
+}
+
+// 明天
+- (BOOL) isTomorrow {
+    NSDate* today = [NSDate getTomorrow];
+    return [NSDate isEqualDay:self date:today];
+}
+-(BOOL)isYesterday {
+   
+    NSDate* today = [NSDate getYesterday];
+    return [NSDate isEqualDay:self date:today];
+}
+// 后天
+- (BOOL) isAfterTomorrow {
+    
+    NSDate* today = [NSDate getAfterTomorrow];
+    return [NSDate isEqualDay:self date:today];
+}
+
++(NSDate *)getToday {
+    return [NSDate date];
+}
+
++(NSDate *)getTomorrow {
+    NSDate* tomorrow = [[NSDate alloc]initWithTimeIntervalSinceNow: 86400];// 明天
+    return tomorrow;
+}
++(NSDate *)getYesterday {
+    NSDate* tomorrow = [[NSDate alloc]initWithTimeIntervalSinceNow: -86400];// 昨天
+    return tomorrow;
+}
++(NSDate *)getAfterTomorrow {
+    NSDate* afterTomorrow = [[NSDate alloc]initWithTimeIntervalSinceNow: 172800];//后天
+    return afterTomorrow;
+}
+@end
+
+
+
+
+
+
+
+
+

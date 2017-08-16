@@ -20,7 +20,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
-    TJHorizontalCalendarView *calenderView = [[TJHorizontalCalendarView alloc] initWithFrame:CGRectMake(15, 60, self.view.frame.size.width - 30, 400)];
+    TJVerticalCalendarView *calenderView = [[TJVerticalCalendarView alloc] initWithFrame:CGRectMake(15, 60, self.view.frame.size.width - 30, 400)];
     [self.view addSubview:calenderView];
 //    [calenderView mas_makeConstraints:^(MASConstraintMaker *make) {
 //        make.edges.mas_equalTo(UIEdgeInsetsMake(60, 15, 0, 15));
