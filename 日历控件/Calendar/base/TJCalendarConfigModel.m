@@ -450,6 +450,17 @@ static int indexPaths[] = {0,6,12,18,24,30,36,1,7,13,19,25,31,37,2,8,14,20,26,32
             [list addObject:calendarData];
             sDate = [sDate afterDay:1];
         }
+        weekStart = sDate.numbersOfWeek;
+        if (weekStart != 1) {
+           for (NSInteger index = weekStart - 1; index < 7; index++) {
+                TJCalendarData *calendarData = [[self.configData.calendarDataClass alloc] initWithDateType:TJCalendarDataEmpty locationType:TJCalendarLocationLeft date:sDate  path:[NSIndexPath indexPathForRow:list.count inSection:i] currentMonthDate:NO];
+                self.configData.calendarData(calendarData);
+                [list addObject:calendarData];
+                sDate = [sDate afterDay:1];
+            }
+        }
+        
+        
         [self.listMonths addObject:list];
         monthDate = [monthDate afterMonth:1];
         date = [monthDate monthStartDate];
