@@ -29,7 +29,7 @@
 @property(nonatomic,strong)TJCalendarDataConfig *configData;
 
 @property(nonatomic,strong)NSMutableArray *selectCalendarDatas;
-
+@property(nonatomic,strong)NSMutableArray *panselectCalendarDatas;
 -(void)creatMonthArrs;
 -(void)setSelectIndex:(TJCalendarData *)data;
 @end
@@ -256,6 +256,18 @@ static int indexPaths[] = {0,6,12,18,24,30,36,1,7,13,19,25,31,37,2,8,14,20,26,32
     if(indexPath) {
         [self panChanegeCalendarSelectData:indexPath];
     }
+    
+    for (TJCalendarData *data in _panselectCalendarDatas) {
+        if(_isStartSelected) {
+            if ([_selectCalendarDatas containsObject:data]) {
+                continue;
+            }else {
+                [_selectCalendarDatas addObject:data];
+            }
+        }else {
+            [_selectCalendarDatas removeObject:data];
+        }
+    }
     _panSelectStartIndexPath = nil;
     _panChangeIndexPath = nil;
 }
@@ -271,7 +283,6 @@ static int indexPaths[] = {0,6,12,18,24,30,36,1,7,13,19,25,31,37,2,8,14,20,26,32
         }
     }
     _panChangeIndexPath = endIndexPath;
-    
     NSArray *startItems = self.listMonths[_panSelectStartIndexPath.section];
     NSArray *endItems = self.listMonths[endIndexPath.section];
     
@@ -281,7 +292,16 @@ static int indexPaths[] = {0,6,12,18,24,30,36,1,7,13,19,25,31,37,2,8,14,20,26,32
     NSIndexPath *panStartIndexPath = startItem.path;
     NSIndexPath *panEndIndexPath = endItem.path;
     
-     BOOL isSelected = _isStartSelected;
+    BOOL isSelected = _isStartSelected;
+    
+    for (TJCalendarData *data in _panselectCalendarDatas) {
+        if([_selectCalendarDatas containsObject:data]) {
+            self.calendarSelectData(self.selectCalendarDatas,data,YES);
+        }else {
+            self.calendarSelectData(self.selectCalendarDatas,data,NO);
+        }
+    }
+    _panselectCalendarDatas = [NSMutableArray arrayWithCapacity:10];
     
     if (panStartIndexPath.section > panEndIndexPath.section) {
         panEndIndexPath = startItem.path;
@@ -357,17 +377,10 @@ static int indexPaths[] = {0,6,12,18,24,30,36,1,7,13,19,25,31,37,2,8,14,20,26,32
     return indexPaths[row];
 }
 -(void)panChangeCalendarData:(TJCalendarData *)data isSelected:(BOOL)isSelected  {
-    
-    NSLog(@"%@ == %@",@(data.path.row),data.date);
-    
+   
     if (data.dataType != TJCalendarDataEmpty) {
-        if (isSelected) {
-            [_selectCalendarDatas addObject:data];
-            self.calendarSelectData(self.selectCalendarDatas,data,YES);
-        }else {
-            [_selectCalendarDatas removeObject:data];
-            self.calendarSelectData(self.selectCalendarDatas,data,NO);
-        }
+        [_panselectCalendarDatas addObject:data];
+        self.calendarSelectData(self.selectCalendarDatas,data,isSelected);
     }
 
 }
@@ -395,7 +408,7 @@ static int indexPaths[] = {0,6,12,18,24,30,36,1,7,13,19,25,31,37,2,8,14,20,26,32
      NSArray *startItems = self.listMonths[_panSelectStartIndexPath.section];
     TJCalendarData *startItem = startItems[_panSelectStartIndexPath.row];
     _isStartSelected = ![_selectCalendarDatas containsObject:startItem];
-    
+    _panselectCalendarDatas = [NSMutableArray array];
 }
 
 

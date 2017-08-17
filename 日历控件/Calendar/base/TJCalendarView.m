@@ -215,21 +215,20 @@
     
     CGPoint point = [recognizer locationInView:recognizer.view];
     NSIndexPath *indexPath = [self.calendarView indexPathForItemAtPoint:point];
-
-   
-    
     if (recognizer.state == UIGestureRecognizerStateEnded || recognizer.state == UIGestureRecognizerStateFailed || recognizer.state == UIGestureRecognizerStateCancelled) {
         [_configModel endPanGestureRecognizerIndexPath:indexPath];
+        _calendarView.scrollEnabled = YES;
         return;
     }
     if (indexPath == nil) {
-        NSLog(@"%@ nil  nil",NSStringFromCGPoint(point));
         return;
     }
     if (recognizer.state == UIGestureRecognizerStateBegan) {
         [_configModel startPanGestureRecognizerIndexPath:indexPath];
+          _calendarView.scrollEnabled = NO;
         return;
     }
+      _calendarView.scrollEnabled = NO;
     [_configModel changePanGestureRecognizerIndexPath:indexPath];
     [_calendarView reloadData];
 }
